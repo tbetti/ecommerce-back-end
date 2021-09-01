@@ -27,8 +27,15 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
-  // create a new category
+router.post('/', async (req, res) => {
+  try{
+    // create a new category
+    const newCategory = req.body;
+    const categoryData = await Category.create(newCategory);
+    res.json(categoryData);
+  }catch(err){
+    res.json(err, 'Some things to try: make sure you have use the correct column name ("category_name") \nOnly create one new category at a time');
+  }
 });
 
 router.put('/:id', (req, res) => {
