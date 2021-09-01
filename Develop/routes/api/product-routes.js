@@ -20,7 +20,6 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
   Product.findByPk(req.params.id, {
     include: [
       { model: Category },
@@ -108,6 +107,15 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    where: { id: req.params.id }
+  })
+  .then(()=>{
+    res.json({ message: `Product at id: ${req.params.id} successfully deleted`});
+  })
+  .catch(err =>{
+    res.status(400).json(err);
+  });
 });
 
 module.exports = router;
