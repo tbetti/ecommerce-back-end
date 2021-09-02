@@ -19,6 +19,11 @@ router.get('/', async (req, res) => {
 // Get one category
 router.get('/:id', async (req, res) => {
   try{
+    // Ensure id exists
+    const exists = await Category.findByPk(req.params.id);
+    if(!exists){
+      res.status(400).json({msg: `ID:${req.params.id} does not exist`})
+    }
     // find one category by its `id` value
     const categoryData = await Category.findByPk(req.params.id, {
       include: [{ model: Product }]
@@ -44,6 +49,12 @@ router.post('/', async (req, res) => {
 // Update a category
 router.put('/:id', async (req, res) => {
   try{
+    // Ensure id exists
+    const exists = await Category.findByPk(req.params.id);
+    if(!exists){
+      res.status(400).json({msg: `ID:${req.params.id} does not exist`})
+    }
+
     // update a category by its `id` value
     await Category.update(
       { "category_name": req.body.category_name },
@@ -60,6 +71,10 @@ router.put('/:id', async (req, res) => {
 // Delete a category
 router.delete('/:id', async (req, res) => {
   try{
+    const exists = await Category.findByPk(req.params.id);
+    if(!exists){
+      res.status(400).json({msg: `ID:${req.params.id} does not exist`})
+    }
     // delete a category by its `id` value
     await Category.destroy({
       where: {
