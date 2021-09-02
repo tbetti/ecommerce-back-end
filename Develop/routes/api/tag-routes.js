@@ -67,6 +67,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try{
+    // Ensure id exists
     const exists = await Tag.findByPk(req.params.id);
     if(!exists){
       res.status(400).json(`ID:${req.params.id} does not exist`);
