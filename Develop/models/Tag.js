@@ -14,8 +14,8 @@ Tag.init(
       autoIncrement: true
     },
     tag_name: {
-      type: DataTypes.STRING
-      // Do I need to falsify allowNull?
+      type: DataTypes.STRING,
+      allowNull: false,
     }
   },
   {
