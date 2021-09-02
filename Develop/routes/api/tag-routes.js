@@ -46,8 +46,23 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
+router.put('/:id', async (req, res) => {
+  try{
+    // Ensure id exists
+    const exists = await Tag.findByPk(req.params.id);
+    if(!exists){
+      res.status(400).json(`ID:${req.params.id} does not exist`);
+    }
+    
+    // update a tag's name by its `id` value
+    await Tag.update({'tag_name': req.body.tag_name},
+    {
+      where: {id: req.params.id},
+    })
+    res.status(200).json(`Successfully updated tag at ID:${req.params.id}`);
+  }catch(err){
+    res.status(500).json(err);
+  }
 });
 
 router.delete('/:id', (req, res) => {
