@@ -10,9 +10,9 @@ router.get('/', async (req, res) => {
     const categoryData = await Category.findAll({
       include: [{ model: Product }]
     });
-    res.json(categoryData);
+    res.status(200).json(categoryData);
   }catch(err){
-    res.json(err);
+    res.status(500).json(err);
   }
 });
 
@@ -28,9 +28,9 @@ router.get('/:id', async (req, res) => {
     const categoryData = await Category.findByPk(req.params.id, {
       include: [{ model: Product }]
     });
-    res.json(categoryData);
+    res.status(200).json(categoryData);
   }catch(err){
-    res.json(err);
+    res.status(500).json(err);
   }
 });
 
@@ -40,9 +40,9 @@ router.post('/', async (req, res) => {
     // create a new category
     const newCategory = req.body;
     const categoryData = await Category.create(newCategory);
-    res.json(categoryData);
+    res.status(200).json(categoryData);
   }catch(err){
-    res.json(err, 'Some things to try: make sure you have use the correct column name ("category_name") \nOnly create one new category at a time');
+    res.status(500).json(err, 'Some things to try: make sure you have use the correct column name ("category_name") \nOnly create one new category at a time');
   }
 });
 
@@ -62,9 +62,9 @@ router.put('/:id', async (req, res) => {
         where: { id: req.params.id }
       }
     );
-    res.json(`Category name at id ${req.params.id} successfully updated`)
+    res.status(200).json(`Category name at id ${req.params.id} successfully updated`)
   }catch(err){
-    res.json(err);
+    res.status(500).json(err);
   }
 });
 
@@ -81,9 +81,9 @@ router.delete('/:id', async (req, res) => {
         id: req.params.id
       }
     });
-    res.json({ message: `Category at ${req.params.id} successfully deleted` });
+    res.status(200).json({ message: `Category at ${req.params.id} successfully deleted` });
   }catch(err){
-    res.json(err);
+    res.status(500).json(err);
   }
 });
 
