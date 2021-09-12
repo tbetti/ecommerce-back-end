@@ -10,7 +10,10 @@ router.get('/', (req, res) => {
     include: [{ model: Category }, { model: Tag }]
   })
   .then(product =>{
-    res.json(product);
+    res.status(200).json(product);
+  })
+  .catch(err =>{
+    res.status(500).json(err);
   })
 });
 
@@ -21,7 +24,14 @@ router.get('/:id', (req, res) => {
     include: [{ model: Category }, { model: Tag }]
   })
   .then(product =>{
-    res.json(product);
+    // Ensure id exists
+    if(product===null){
+      return res.status(400).json(`ID:${req.params.id} does not exist`);
+    }
+    res.status(200).json(product);
+  })
+  .catch(err =>{
+    res.status(500).json(err);
   })
 });
 
@@ -100,11 +110,18 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
-  Product.destroy({
-    where: { id: req.params.id }
+  // find a single product by its `id`
+  Product.findByPk(req.params.id, {
+    include: [{ model: Category }, { model: Tag }]
   })
-  .then(()=>{
+  .then(product =>{
+    // Ensure id exists
+    if(product===null){
+      return res.status(400).json(`ID:${req.params.id} does not exist`);
+    }
+    Product.destroy({
+      where: { id: req.params.id }
+    });
     res.json({ message: `Product at id: ${req.params.id} successfully deleted`});
   })
   .catch(err =>{
